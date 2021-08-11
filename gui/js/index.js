@@ -23,7 +23,7 @@ if (Config.find(entry => entry.name === "language")) {
     loc = require("./lang/en.json");
 }
 
-let url = "http://192.168.1.54";
+let url = "http://127.0.0.1";
 if (process.env.NODE_ENV === "production") {url = window.location.origin;}
 
 if (process.env.NODE_ENV === "development") {require("preact/debug");}
@@ -80,12 +80,12 @@ function Root() {
                 <h1><HeaderIcon style={{verticalAlign:"-0.1em"}} /> {projectName} {projectVersion}</h1>
 
                 <Hamburger onClick={() => setMenu(!menu)} />
-                <Menu className={menu ? "" : "menuHidden"}>
-                    <li><NavLink onClick={() => setMenu(false)} exact to="/">{loc.titleWifi}</NavLink></li>
-                    <li><NavLink onClick={() => setMenu(false)} exact to="/dashboard">{loc.titleDash}</NavLink></li>
+                <Menu className={menu ? "" : "menuHidden"}>                   
+                    <li><NavLink onClick={() => setMenu(false)} exact to="/">{loc.titleDash}</NavLink></li>
                     <li><NavLink onClick={() => setMenu(false)} exact to="/config">{loc.titleConf}</NavLink></li>
-                    <li><NavLink onClick={() => setMenu(false)} exact to="/files">{loc.titleFile}</NavLink></li>
-                    <li><NavLink onClick={() => setMenu(false)} exact to="/firmware">{loc.titleFw}</NavLink></li>
+                    <li><NavLink onClick={() => setMenu(false)} exact to="/wifi">{loc.titleWifi}</NavLink></li>
+                    {/* <li><NavLink onClick={() => setMenu(false)} exact to="/files">{loc.titleFile}</NavLink></li> */}
+                    {/* <li><NavLink onClick={() => setMenu(false)} exact to="/firmware">{loc.titleFw}</NavLink></li> */}
                 </Menu>
 
             </Header>
@@ -101,7 +101,7 @@ function Root() {
                             binSize={binSize}
                             requestUpdate={fetchData} />
                     </Route>
-                    <Route exact path="/dashboard">
+                    <Route exact path="/">
                         <DashboardPage API={url} 
                             socket={socket}
                             requestData={() => {return displayData;}} />
@@ -109,7 +109,7 @@ function Root() {
                     <Route exact path="/firmware">
                         <FirmwarePage API={url} />
                     </Route>
-                    <Route path="/">
+                    <Route path="/wifi">
                         <WifiPage API={url} />
                     </Route>
                 </Switch>
