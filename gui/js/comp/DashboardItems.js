@@ -3,7 +3,7 @@ import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 
 import { ControlItem } from "./ControlItem";
-import { DisplayItem } from "./DisplayItem";
+import { DisplayItemm } from "./DisplayItem";
 import { StyledSlider } from "./UiComponents";
 import Config from "./../configuration.json";
 
@@ -111,7 +111,7 @@ const DefaultTypeAttributes = {
 export function DashboardItems(props) {
 
     const [data, setData] = useState([]);
-    
+    // const [state, setState] = useState([]);
     //populate graphs
     useEffect(() => {   
         if (props.data.length > 0 && typeof props.data[0][1] !== "undefined") {
@@ -208,6 +208,7 @@ export function DashboardItems(props) {
                                 dataType={props.items[i].type} 
                                 type={inputType} 
                                 name={props.items[i].name} 
+                                inputControl={props.items[i].inputControl}
                                 value={value} 
                                 conditionalAttributes={conditionalAttributes} 
                             />                            
@@ -241,15 +242,20 @@ export function DashboardItems(props) {
                                 <label htmlFor={props.items[i].name}><b>{props.items[i].label || props.items[i].name}</b>: {rangeInfo}</label>
                                 
                         <StyledSlider
-                            id={Config[i].name}
-                            name={Config[i].name}
+                            id={props.items[i].name}
+                            name={props.items[i].name}
                             className="horizontal-slider"
                             thumbClassName="slider-thumb"
                             trackClassName="slider-track"
-                            renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-                            value={Config[i].value}
+                            renderThumb={(props, data) => <div {...props}>{data.valueNow}</div>}
+                            // value={data[props.items[i].name]}
+                            value={props.items[i].value}
                             {...conditionalAttributes}
                             // onAfterChange={(val) => document.getElementById[Config[i].name] = val}
+                            // onAfterChange={e => setData(e.target.value)}
+                            // onAfterChange={(e) => { setData[e.target]= e.target.value;  }} 
+                            // onAfterChange={(e) => { data[props.items[i]](e.target.value)}} 
+                          
                         /></p></>;
                     }
                     else {

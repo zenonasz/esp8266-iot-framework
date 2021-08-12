@@ -86,6 +86,8 @@ export function ControlItem(props) {
 
     let checkbox = false;
     let rangeInfo;
+    const inputControl = props.inputControl || "input";
+    console.log(configData[inputControl]);
     if (typeof props.conditionalAttributes !== "undefined" && typeof props.conditionalAttributes.checked !== "undefined") {
         props.conditionalAttributes.checked = data;
         checkbox = true;
@@ -113,27 +115,27 @@ export function ControlItem(props) {
     } else if (props.type == "color") {
         return <input onChange={(e) => { setTarget(e.target.value); save(); }} type={props.type} id={props.name} name={props.name} value={data} {...props.conditionalAttributes} />;
     } 
-    // else if (props.type =="number") {
-    //     console.log('I was triggered during componentDidMount')
-    // }
-    // else if (props.type == "number") {
-    //     // Using https://github.com/zillow/react-slider
 
-    //     // Hide range info label, is redundant, since slider thumb displays selected value.
-    //     rangeInfo = "";
 
-    //     return <StyledSlider
-    //         id={Config[i].name}
-    //         name={Config[i].name}
-    //         className="horizontal-slider"
-    //         thumbClassName="slider-thumb"
-    //         trackClassName="slider-track"
-    //         renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-    //         value={value}
-    //         {...conditionalAttributes}
-    //         onAfterChange={(val) => state[Config[i].name] = val}
-    //     />;
-    // } 
+
+    else if (inputControl == "slider" ) {
+        // Using https://github.com/zillow/react-slider
+
+        // Hide range info label, is redundant, since slider thumb displays selected value.
+
+        return <StyledSlider
+            id={props.name}
+            name={props.name}
+            className="horizontal-slider"
+            thumbClassName="slider-thumb"
+            trackClassName="slider-track"
+            renderThumb={(props, data) => <div {...props}>{data.valueNow}</div>}
+            value={data}
+            {...conditionalAttributes}
+            onAfterChange={(e) => { setTarget(e.target.value); save(); }} 
+        />;
+    }
+    
     else {
         return <><input onChange={(e) => { setTarget(e.target.value); }} type={props.type} id={props.name} name={props.name} value={data} {...props.conditionalAttributes} />
             <Button onClick={(e) => {
