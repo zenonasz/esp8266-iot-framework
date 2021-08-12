@@ -3,7 +3,7 @@ import styled, { createGlobalStyle, css } from "styled-components";
 import { normalize } from "styled-normalize";
 import { FiLoader as Loader, FiMenu as MenuIcon } from "react-icons/fi";
 import PropTypes from "prop-types";
-
+import ReactSlider from "react-slider";
 export const cPrimary = "#0055ff"; 
 export const cPrimaryHover = "#0066ee"; 
 export const cHeader = "#111";
@@ -26,7 +26,8 @@ export const GlobalStyle = createGlobalStyle`
     body {
         font-size:1.2em;
         line-height:1.4em;
-
+        background: ${({ theme }) => theme.body};
+        color: ${({ theme }) => theme.text};
         @media (max-width: 500px) 
         { 
             font-size:1em;
@@ -38,12 +39,12 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     a {
-        color: ${cSecondary};
+        color: ${({ theme }) => theme.cSecondary};
         text-decoration: none;
         cursor:pointer;
     
         &:hover {
-            color: ${cSecondaryHover};
+            color: ${({ theme }) => theme.cSecondaryHover};
         }
     }
 
@@ -59,6 +60,64 @@ export const GlobalStyle = createGlobalStyle`
             max-width: initial !important;
         }
     }
+
+    .horizontal-slider {
+        max-width: 100%;
+        height: 38px;
+        border: 0px solid grey;
+    }
+    .vertical-slider {
+        height: 380px;
+        width: 38px;
+        border: 1px solid grey;
+    }
+    .slider-thumb {
+        font-size: 0.8em;
+        text-align: center;
+        background-color: white;
+        color: black;
+        cursor: pointer;
+        border: 4px solid #ccc;
+        box-shadow:0 0 4px #aaa;
+        box-sizing: border-box;
+        border-radius: 50%;
+    }
+    .slider-thumb.active {
+        outline:none;
+        border-color:${({ theme }) => theme.cPrimaryHover};
+        box-shadow:0 0 10px ${({ theme }) => theme.cPrimaryHover};
+    }
+    .slider-track {
+        position: relative;
+        background: ${({ theme }) => theme.cPrimary};
+        border-radius: 999px;
+    }
+    .slider-track.slider-track-1 {
+        background: #ddd;
+    }
+    .slider-track.slider-track-2 {
+        background: #0f0;
+    }
+    .horizontal-slider .slider-track {
+        top: 16px;
+        height: 8px;
+    }
+    .horizontal-slider .slider-thumb {
+        top: 1px;
+        width: 40px;
+        height: 38px;
+        line-height: 30px;
+    }
+    .vertical-slider .slider-thumb {
+        left: 1px;
+        width: 38px;
+        height: 40px;
+        line-height: 30px;
+    }
+    .vertical-slider .slider-track {
+        left: 16px;
+        width: 8px;
+    }   
 `;
 
 const HeaderSrc = ({ className, children }) => (
@@ -72,7 +131,7 @@ HeaderSrc.propTypes = {
 };
 
 export const Header = styled(HeaderSrc)`
-    background-color: ${cHeader};   
+    background-color: ${({ theme }) => theme.cHeader};
     padding:0.3em 0em; 
 
     h1 {
@@ -106,12 +165,12 @@ export const Header = styled(HeaderSrc)`
 
     a:hover {
         color:#fff;
-        background-color: ${cHeaderHover};
+        background-color: ${({ theme }) => theme.cHeaderHover};
     }
 
     a.active {
     background-color: #fff;
-    color:${cHeader};
+    color:${({ theme }) => theme.cHeader};
     }
 
     @media (max-width: 1024px) 
@@ -143,6 +202,11 @@ export const Card = styled.div`
         padding:1em;
     }
 
+`;
+
+export const StyledSlider = styled(ReactSlider)`
+    width: 100%;
+    height: 25px;
 `;
 
 const HamburgerSrc = ({ className, onClick }) => (
@@ -302,6 +366,8 @@ export const Form = styled.form`
     input[type=number],
     input[type=checkbox],
     input[type=text] {
+        background: ${({ theme }) => theme.body};
+        color: ${({ theme }) => theme.text};
         width:450px;
         max-width:100%;
         box-sizing: border-box;

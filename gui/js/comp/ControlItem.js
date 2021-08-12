@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { Button } from "./UiComponents";
+import { Button, StyledSlider } from "./UiComponents";
 import { FiUpload as Upload } from "react-icons/fi";
 
 import Dash from "../dashboard.json";
@@ -17,15 +17,15 @@ export function ControlItem(props) {
     //populate graphs
     useEffect(() => {
         if (target != null) {
-            setData(target);                  
+            setData(target);
         } else {
-            setData(props.value);                  
+            setData(props.value);
         }
 
         if (saved) {
             setSaving(0);
             setSaved(0);
-            setTimeout(() => {setTarget(null);},750);
+            setTimeout(() => { setTarget(null); }, 750);
         }
     });
 
@@ -43,9 +43,9 @@ export function ControlItem(props) {
                     break;
                 case "color":
                     //parse color code
-                    binDataView.setUint8(0, parseInt(target.slice(1,3), 16));
-                    binDataView.setUint8(1, parseInt(target.slice(3,5), 16));
-                    binDataView.setUint8(2, parseInt(target.slice(5,7), 16));                       
+                    binDataView.setUint8(0, parseInt(target.slice(1, 3), 16));
+                    binDataView.setUint8(1, parseInt(target.slice(3, 5), 16));
+                    binDataView.setUint8(2, parseInt(target.slice(5, 7), 16));
                     break;
                 case "bool":
                     if (target === true) { binDataView.setUint8(0, 1); } else { binDataView.setUint8(0, 0); }
@@ -53,7 +53,7 @@ export function ControlItem(props) {
                 case "uint8_t":
                     binDataView.setUint8(0, Number(target));
                     break;
-                case "int8_t":
+                case "t":
                     binDataView.setInt8(0, Number(target));
                     break;
                 case "uint16_t":
@@ -75,7 +75,7 @@ export function ControlItem(props) {
             fetch(`${props.API}/api/dash/set?start=${sizes[0]}&length=${sizes[1]}`, {
                 method: "post",
                 body: binData,
-            });  
+            });
             setSaved(true);
         }
     }, [saving]);
@@ -85,7 +85,7 @@ export function ControlItem(props) {
     }
 
     let checkbox = false;
-
+    let rangeInfo;
     if (typeof props.conditionalAttributes !== "undefined" && typeof props.conditionalAttributes.checked !== "undefined") {
         props.conditionalAttributes.checked = data;
         checkbox = true;
@@ -97,8 +97,8 @@ export function ControlItem(props) {
         for (let i = 0; i < props.conditionalAttributes.options.length; i++) {
             if (data == props.conditionalAttributes.options[i]) {
                 isOption = true;
-            }             
-            options = <>{options}<option value={props.conditionalAttributes.options[i]}>{props.conditionalAttributes.options[i]}</option></>;            
+            }
+            options = <>{options}<option value={props.conditionalAttributes.options[i]}>{props.conditionalAttributes.options[i]}</option></>;
         }
 
         if (!isOption) {
@@ -112,9 +112,31 @@ export function ControlItem(props) {
         return <input onClick={(e) => { setTarget(e.target.checked); save(); }} type={props.type} id={props.name} name={props.name} value={data} {...props.conditionalAttributes} />;
     } else if (props.type == "color") {
         return <input onChange={(e) => { setTarget(e.target.value); save(); }} type={props.type} id={props.name} name={props.name} value={data} {...props.conditionalAttributes} />;
-    } else {
+    } 
+    // else if (props.type =="number") {
+    //     console.log('I was triggered during componentDidMount')
+    // }
+    // else if (props.type == "number") {
+    //     // Using https://github.com/zillow/react-slider
+
+    //     // Hide range info label, is redundant, since slider thumb displays selected value.
+    //     rangeInfo = "";
+
+    //     return <StyledSlider
+    //         id={Config[i].name}
+    //         name={Config[i].name}
+    //         className="horizontal-slider"
+    //         thumbClassName="slider-thumb"
+    //         trackClassName="slider-track"
+    //         renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+    //         value={value}
+    //         {...conditionalAttributes}
+    //         onAfterChange={(val) => state[Config[i].name] = val}
+    //     />;
+    // } 
+    else {
         return <><input onChange={(e) => { setTarget(e.target.value); }} type={props.type} id={props.name} name={props.name} value={data} {...props.conditionalAttributes} />
-            <Button onClick={(e) => {            
+            <Button onClick={(e) => {
                 e.preventDefault();
                 save();
             }}><Upload /></Button></>;
@@ -130,5 +152,6 @@ ControlItem.propTypes = {
     value: PropTypes.any,
     sizes: PropTypes.array,
     dataType: PropTypes.string,
+    inputControl: PropTypes.string,
     conditionalAttributes: PropTypes.object,
 };

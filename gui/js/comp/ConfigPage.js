@@ -56,7 +56,12 @@ export function ConfigPage(props) {
                 case "bool":
                     newData[Config[i].name] = document.getElementById(Config[i].name).checked;
                     break;
-
+                // case "number":
+                //     if (Config[i].inputControl == "slider") {
+                //         // Use state property that was modified when slider after change event fired
+                //         newData[Config[i].name] = document.getElementById[Config[i].name].value;
+                //     }
+                //     break;
                 default:
                     newData[Config[i].name] = document.getElementById(Config[i].name).value;
             }

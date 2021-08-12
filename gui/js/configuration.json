@@ -1,16 +1,67 @@
 [
+
     {
         "name": "projectName",
         "label": "Project Name",
         "type": "char",
         "length": 32,
-        "value": "ESP8266 IoT Framework"
+        "hidden": true,
+        "value": "Trinity"
     },
     {
-        "name": "language",        
+        "name": "mqttChkBox",
+        "label": "Enable Mqtt",
+        "type": "bool",
+        "value": false
+    },        
+    {
+        "name": "mqttHost",
+        "label": "Mqtt Server/Host",
         "type": "char",
-        "length": 3,
-        "value": "en",
-        "hidden": true
+        "length": 32,
+        "value": ""
+    },
+    {
+        "name": "mqttPort",
+        "label": "Mqtt Port",
+        "type": "uint16_t",
+        "value": 0
+    },
+    {
+        "name": "mqttClientName",
+        "label": "Mqtt Client name",
+        "type": "char",
+        "length": 32,
+        "value": ""
+    },
+    {
+        "name": "mqttUsername",
+        "label": "Mqtt Username",
+        "type": "char",
+        "length": 32,
+        "value": ""
+    },
+    {
+        "name": "mqttPassword",
+        "label": "Mqtt Password",
+        "type": "char",
+        "length": 32,
+        "value": ""
+    },
+    {
+        "name": "disabledMqttLabel",
+        "label": "Mqtt ready status",
+        "type": "bool",
+        "disabled": true,
+        "value": false
+    },
+    {
+        "name": "dummySlider",
+        "label": "Slider",
+        "type": "uint8_t",
+        "inputControl": "slider",
+        "value": 25,
+        "min": 1,
+        "max": 100
     }
 ]

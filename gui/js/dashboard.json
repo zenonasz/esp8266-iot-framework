@@ -1,3 +1,10 @@
 [
-    
+    {
+        "name": "dummySlider",
+        "label": "Slider",
+        "type": "uint8_t",
+        "inputControl": "slider",
+        "min": 1,
+        "max": 100
+    }
 ]

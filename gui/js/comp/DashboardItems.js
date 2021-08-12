@@ -4,8 +4,9 @@ import styled from "styled-components";
 
 import { ControlItem } from "./ControlItem";
 import { DisplayItem } from "./DisplayItem";
-
+import { StyledSlider } from "./UiComponents";
 import Config from "./../configuration.json";
+
 let loc;
 if (Config.find(entry => entry.name === "language")) {
     loc = require("./../lang/" + Config.find(entry => entry.name === "language").value + ".json");
@@ -143,10 +144,14 @@ export function DashboardItems(props) {
 
             //const configInputAttributes = DefaultTypeAttributes[props.items[i].type] || {};
             let inputType;
+            const inputControl = props.items[i].inputControl || "input";
+            // let inputControl;
             if (typeof props.items[i].control !== "undefined") {
                 inputType = props.items[i].control;
+                // inputControl = props.items[i].inputControl || "input";
             } else {
                 inputType = DefaultTypeAttributes[props.items[i].type].type || "text";
+                // inputControl = DefaultTypeAttributes[props.items[i].type].type || "text";
             }
 
             const conditionalAttributes = {};
@@ -224,7 +229,30 @@ export function DashboardItems(props) {
                                 </select>
                             </p>
                         </>;
-                    } else {
+                    }
+                     else if (inputControl == "slider" ) {
+                        // Using https://github.com/zillow/react-slider
+                
+                        // Hide range info label, is redundant, since slider thumb displays selected value.
+                        rangeInfo = "";
+                
+                        confItems = <>{confItems}
+                         <p>
+                                <label htmlFor={props.items[i].name}><b>{props.items[i].label || props.items[i].name}</b>: {rangeInfo}</label>
+                                
+                        <StyledSlider
+                            id={Config[i].name}
+                            name={Config[i].name}
+                            className="horizontal-slider"
+                            thumbClassName="slider-thumb"
+                            trackClassName="slider-track"
+                            renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                            value={Config[i].value}
+                            {...conditionalAttributes}
+                            // onAfterChange={(val) => document.getElementById[Config[i].name] = val}
+                        /></p></>;
+                    }
+                    else {
                         confItems = <>{confItems}
                             <p>
                                 <label htmlFor={props.items[i].name}><b>{props.items[i].label || props.items[i].name}</b>: {rangeInfo}</label>

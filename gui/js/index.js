@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter, Switch, Route, NavLink} from "react-router-dom";
+import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
 import { FiBox as HeaderIcon } from "react-icons/fi";
 
-import {GlobalStyle, Menu, Header, Page, Hamburger} from "./comp/UiComponents";
+import { GlobalStyle, Menu, Header, Page, Hamburger } from "./comp/UiComponents";
 import { WifiPage } from "./comp/WifiPage";
 import { ConfigPage } from "./comp/ConfigPage";
 import { DashboardPage } from "./comp/DashboardPage";
@@ -15,6 +15,13 @@ import { bin2obj } from "./functions/configHelpers";
 import Config from "./configuration.json";
 import Dash from "./dashboard.json";
 
+import { ThemeProvider } from "styled-components";
+import { useDarkMode } from "./comp/useDarkMode"
+import { lightTheme, darkTheme } from "./comp/Themes"
+import Toggle from "./comp/Toggler"
+
+
+// import AddToHomeScreen from '@ideasio/add-to-homescreen-react';
 
 let loc;
 if (Config.find(entry => entry.name === "language")) {
@@ -24,32 +31,40 @@ if (Config.find(entry => entry.name === "language")) {
 }
 
 let url = "http://127.0.0.1";
-if (process.env.NODE_ENV === "production") {url = window.location.origin;}
+if (process.env.NODE_ENV === "production") { url = window.location.origin; }
 
-if (process.env.NODE_ENV === "development") {require("preact/debug");}
+if (process.env.NODE_ENV === "development") { require("preact/debug"); }
 
-const displayData = new Array();
+
+
+// const theme = dark ? DARK_THEME : LIGHT_THEME;
 
 function Root() {
-    
+
     const [menu, setMenu] = useState(false);
     const [configData, setConfigData] = useState(new Object());
     const [binSize, setBinSize] = useState(0);
     const [socket, setSocket] = useState({});
 
+    const displayData = new Array();
+
+    const [theme, themeToggler, mountedComponent] = useDarkMode();
+
+    const themeMode = theme === 'light' ? lightTheme : darkTheme;
+
     useEffect(() => {
-        const ws = new WebSocket(url.replace("http://","ws://").concat("/ws"));
+        const ws = new WebSocket(url.replace("http://", "ws://").concat("/ws"));
         ws.addEventListener("message", wsMessage);
         setSocket(ws);
-        fetchData();        
+        fetchData();
     }, []);
 
     function wsMessage(event) {
-        event.data.arrayBuffer().then((buffer) => {                
+        event.data.arrayBuffer().then((buffer) => {
             const dv = new DataView(buffer, 0);
             const timestamp = dv.getUint32(0, true);
-            displayData.push([timestamp, bin2obj(buffer.slice(4,buffer.byteLength), Dash)]);     
-        });        
+            displayData.push([timestamp, bin2obj(buffer.slice(4, buffer.byteLength), Dash)]);
+        });
     }
 
     function fetchData() {
@@ -71,52 +86,58 @@ function Root() {
     if (typeof projectVersion === "undefined") {
         projectVersion = Config.find(entry => entry.name === "projectVersion") ? Config.find(entry => entry.name === "projectVersion").value : "";
     }
-    
-    return <><GlobalStyle />
 
-        <BrowserRouter>
 
-            <Header>
-                <h1><HeaderIcon style={{verticalAlign:"-0.1em"}} /> {projectName} {projectVersion}</h1>
+    return <ThemeProvider theme={themeMode}>
+        <><GlobalStyle />
 
-                <Hamburger onClick={() => setMenu(!menu)} />
-                <Menu className={menu ? "" : "menuHidden"}>                   
-                    <li><NavLink onClick={() => setMenu(false)} exact to="/">{loc.titleDash}</NavLink></li>
-                    <li><NavLink onClick={() => setMenu(false)} exact to="/config">{loc.titleConf}</NavLink></li>
-                    <li><NavLink onClick={() => setMenu(false)} exact to="/wifi">{loc.titleWifi}</NavLink></li>
-                    {/* <li><NavLink onClick={() => setMenu(false)} exact to="/files">{loc.titleFile}</NavLink></li> */}
-                    {/* <li><NavLink onClick={() => setMenu(false)} exact to="/firmware">{loc.titleFw}</NavLink></li> */}
-                </Menu>
+            <BrowserRouter>
 
-            </Header>
-        
-            <Page>
-                <Switch>
-                    <Route exact path="/files">
-                        <FilePage API={url} />
-                    </Route>
-                    <Route exact path="/config">
-                        <ConfigPage API={url} 
-                            configData={configData}
-                            binSize={binSize}
-                            requestUpdate={fetchData} />
-                    </Route>
-                    <Route exact path="/">
-                        <DashboardPage API={url} 
-                            socket={socket}
-                            requestData={() => {return displayData;}} />
-                    </Route>
-                    <Route exact path="/firmware">
-                        <FirmwarePage API={url} />
-                    </Route>
-                    <Route path="/wifi">
-                        <WifiPage API={url} />
-                    </Route>
-                </Switch>
-            </Page>
+                <Header>
+                    <h1><HeaderIcon style={{ verticalAlign: "-0.1em" }} /> {projectName} {projectVersion}</h1>
+                   
+                    <Hamburger onClick={() => setMenu(!menu)} />
 
-        </BrowserRouter>
-    </>;
+                    <Menu className={menu ? "" : "menuHidden"}>
+                        <li><NavLink onClick={() => setMenu(false)} exact to="/">{loc.titleDash}</NavLink></li>
+                        <li><NavLink onClick={() => setMenu(false)} exact to="/config">{loc.titleConf}</NavLink></li>
+                        <li><NavLink onClick={() => setMenu(false)} exact to="/wifi">{loc.titleWifi}</NavLink></li>
+                        {/* <li><NavLink onClick={() => setMenu(false)} exact to="/files">{loc.titleFile}</NavLink></li> */}
+                        {/* <li><NavLink onClick={() => setMenu(false)} exact to="/firmware">{loc.titleFw}</NavLink></li> */}
+                        <Toggle theme={theme} toggleTheme={themeToggler} />
+
+                    </Menu>
+
+                </Header>
+
+                <Page>
+                    <Switch>
+                        <Route exact path="/files">
+                            <FilePage API={url} />
+                        </Route>
+                        <Route exact path="/config">
+                            <ConfigPage API={url}
+                                configData={configData}
+                                binSize={binSize}
+                                requestUpdate={fetchData} />
+                        </Route>
+                        <Route exact path="/">
+                            <DashboardPage API={url}
+                                socket={socket}
+                                requestData={() => { return displayData; }} />
+                        </Route>
+                        <Route exact path="/firmware">
+                            <FirmwarePage API={url} />
+                        </Route>
+                        <Route path="/wifi">
+                            <WifiPage API={url} />
+                        </Route>
+                    </Switch>
+                </Page>
+
+            </BrowserRouter>
+
+        </></ThemeProvider>;
 
 }
 
