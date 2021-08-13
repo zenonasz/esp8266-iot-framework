@@ -19,13 +19,13 @@
         "label": "Mqtt Server/Host",
         "type": "char",
         "length": 32,
-        "value": ""
+        "value": "rest"
     },
     {
         "name": "mqttPort",
         "label": "Mqtt Port",
         "type": "uint16_t",
-        "value": 0
+        "value": 1
     },
     {
         "name": "mqttClientName",

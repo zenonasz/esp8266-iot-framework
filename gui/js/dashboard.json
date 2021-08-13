@@ -5,6 +5,60 @@
         "type": "uint8_t",
         "inputControl": "slider",
         "min": 1,
-        "max": 100
+        "max": 100,
+        "direction": "control"
+    },
+     
+    {
+        "name": "adjustClockwiseInpt",
+        "label": "Adjust Clockwise",
+        "type": "uint32_t",
+        "direction": "control"
+    },
+    {
+        "name": "adjustAntiClockwiseInpt",
+        "label": "Adjust Anticlockwise",
+        "type": "uint32_t",
+        "direction": "control"
+    },
+    {
+        "name": "revolutionsInpt",
+        "label": "Revolutions",
+        "type": "uint16_t",
+        "direction": "control"
+    },
+    {
+        "name": "directionDD",
+        "label": "Direction",
+        "type": "char",
+        "length": 32,
+        "direction": "control",
+        "control": "select",
+        "options": ["CLOCKWISE", "ANTI_CLOCKWISE", "FORTH_AND_BACK"]
+    },
+    {
+        "name": "windingFrequencyDD",
+        "label": "Winding frequency",
+        "type": "char",
+        "length": 32,
+        "direction": "control",
+        "control": "select",
+        "options": ["CONTINUOUS", "MINUTE", "HOUR", "DAY", "ON_DEMAND"]
+    },
+    {
+        "name": "rpmSpeedDD",
+        "label": "RPM speed",
+        "type": "char",
+        "length": 32,
+        "direction": "control",
+        "control": "select",
+        "options": ["RPM_15", "RPM_7", "RPM_5", "RPM_4", "RPM_3", "RPM_2","RPM_1"]
+    },
+    {
+        "name": "mqttChkBox",
+        "label": "Enable Mqtt",
+        "type": "bool"
+       
     }
+
 ]

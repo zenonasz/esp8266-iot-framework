@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
 
@@ -113,13 +113,13 @@ export function DashboardItems(props) {
     const [data, setData] = useState([]);
     // const [state, setState] = useState([]);
     //populate graphs
-    useEffect(() => {   
+    useEffect(() => {
         if (props.data.length > 0 && typeof props.data[0][1] !== "undefined") {
             //contains historical data
             setData(props.data[props.data.length - 1][1]);
         } else {
             setData(props.data);
-        }        
+        }
     });
 
     let confItems;
@@ -132,19 +132,33 @@ export function DashboardItems(props) {
             }
 
             let value;
-            if (typeof data !== "undefined" && typeof data[props.items[i].name] !== "undefined") { 
-                value = data[props.items[i].name]; 
-
+            // if (typeof data !== "undefined" && data[props.items[i].name] !== "undefined") {
+            //     console.log(props.items[i].name);
+            // }
+            if (typeof data !== "undefined" && typeof data[props.items[i].name] !== "undefined") {
+                value = data[props.items[i].name];
+                console.log(props.items[i].name);
+                // if (props.items[i].inputControl == "slider" ) {
+                //     console.log(props.items[i].name);
+                // } 
                 //number of digits
                 if (props.items[i].type == "float" && typeof props.items[i].digits !== "undefined") {
                     value = parseFloat(value).toFixed(props.items[i].digits);
                 }
-                
-            } else { value = ""; }
+
+            } else {
+                // if (props.items[i].type == "int8_t" ) {
+                //     value = 0;
+                //     console.log("yes");
+                // } else {
+                value = "";
+                // console.log(props.items[i].type);
+                // }
+            }
 
             //const configInputAttributes = DefaultTypeAttributes[props.items[i].type] || {};
             let inputType;
-            const inputControl = props.items[i].inputControl || "input";
+            let inputControlCheck;
             // let inputControl;
             if (typeof props.items[i].control !== "undefined") {
                 inputType = props.items[i].control;
@@ -152,6 +166,12 @@ export function DashboardItems(props) {
             } else {
                 inputType = DefaultTypeAttributes[props.items[i].type].type || "text";
                 // inputControl = DefaultTypeAttributes[props.items[i].type].type || "text";
+            }
+            if (typeof props.items[i].inputControl !== "undefined") {
+                inputControlCheck = props.items[i].inputControl;
+                // console.log(inputControlCheck);
+            } else {
+                inputControlCheck = "";
             }
 
             const conditionalAttributes = {};
@@ -184,34 +204,34 @@ export function DashboardItems(props) {
             }
 
             const direction = props.items[i].direction || "config";
-            
+
             switch (direction) {
-                case "display":                    
+                case "display":
                     confItems = <>{confItems}
                         <Display>
                             <label htmlFor={props.items[i].name}><b>{props.items[i].label || props.items[i].name}</b>: {rangeInfo}</label>
-                            <DisplayItem 
-                                item={props.items[i]} 
+                            <DisplayItem
+                                item={props.items[i]}
                                 data={props.data}
                                 value={value} />
                         </Display>
                     </>;
-                    
+
                     break;
 
-                case "control":                     
+                case "control":
                     confItems = <>{confItems}
                         <Control>
                             <label htmlFor={props.items[i].name}><b>{props.items[i].label || props.items[i].name}</b>: {rangeInfo}</label>
-                            <ControlItem 
-                                API={props.API} 
-                                dataType={props.items[i].type} 
-                                type={inputType} 
-                                name={props.items[i].name} 
-                                inputControl={props.items[i].inputControl}
-                                value={value} 
-                                conditionalAttributes={conditionalAttributes} 
-                            />                            
+                            <ControlItem
+                                API={props.API}
+                                dataType={props.items[i].type}
+                                type={inputType}
+                                inputControl={inputControlCheck}
+                                name={props.items[i].name}
+                                value={value}
+                                conditionalAttributes={conditionalAttributes}
+                            />
                         </Control>
                     </>;
                     break;
@@ -219,8 +239,8 @@ export function DashboardItems(props) {
                 case "config":
                     if (inputType == "select") {
                         let options;
-                        for (let i = 0; i < conditionalAttributes.options.length; i++) {           
-                            options = <>{options}<option value={conditionalAttributes.options[i]}>{conditionalAttributes.options[i]}</option></>;            
+                        for (let i = 0; i < conditionalAttributes.options.length; i++) {
+                            options = <>{options}<option value={conditionalAttributes.options[i]}>{conditionalAttributes.options[i]}</option></>;
                         }
                         confItems = <>{confItems}
                             <p>
@@ -230,33 +250,38 @@ export function DashboardItems(props) {
                                 </select>
                             </p>
                         </>;
+                        break;
+
                     }
-                     else if (inputControl == "slider" ) {
+                    else if (inputControlCheck == "slider") {
                         // Using https://github.com/zillow/react-slider
-                
+
                         // Hide range info label, is redundant, since slider thumb displays selected value.
                         rangeInfo = "";
-                
+                        data[props.items[i]] = props.items[i].value;
                         confItems = <>{confItems}
-                         <p>
+                            <p>
                                 <label htmlFor={props.items[i].name}><b>{props.items[i].label || props.items[i].name}</b>: {rangeInfo}</label>
-                                
-                        <StyledSlider
-                            id={props.items[i].name}
-                            name={props.items[i].name}
-                            className="horizontal-slider"
-                            thumbClassName="slider-thumb"
-                            trackClassName="slider-track"
-                            renderThumb={(props, data) => <div {...props}>{data.valueNow}</div>}
-                            // value={data[props.items[i].name]}
-                            value={props.items[i].value}
-                            {...conditionalAttributes}
-                            // onAfterChange={(val) => document.getElementById[Config[i].name] = val}
-                            // onAfterChange={e => setData(e.target.value)}
-                            // onAfterChange={(e) => { setData[e.target]= e.target.value;  }} 
-                            // onAfterChange={(e) => { data[props.items[i]](e.target.value)}} 
-                          
-                        /></p></>;
+
+                                <StyledSlider
+                                    id={props.items[i].name}
+                                    name={props.items[i].name}
+                                    className="horizontal-slider"
+                                    thumbClassName="slider-thumb"
+                                    trackClassName="slider-track"
+                                    renderThumb={(props, data) => <div {...props}>{data.valueNow}</div>}
+                                    // value={data[props.items[i].name]}
+                                    value={value}
+                                    // value={data[props.items[i]]}
+                                    {...conditionalAttributes}
+                                    // onAfterChange={(val) => document.getElementById[Config[i].name] = val}
+                                    // onAfterChange={e => setData(e.target.value)}
+                                    onAfterChange={(val) => data[props.items[i]] = val}
+                                // onAfterChange={(e) => { data[props.items[i]](e.target.value)}} 
+
+                                /></p></>;
+                        break;
+
                     }
                     else {
                         confItems = <>{confItems}
@@ -267,9 +292,9 @@ export function DashboardItems(props) {
                         </>;
                     }
                     break;
-                    
+
             }
-            
+
         }
     }
 

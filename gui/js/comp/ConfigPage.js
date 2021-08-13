@@ -15,30 +15,30 @@ if (Config.find(entry => entry.name === "language")) {
 }
 
 export function ConfigPage(props) {
-
+    
     useEffect(() => {
         document.title = loc.titleConf;
     }, []);
-
-    const confItems = <DashboardItems items={Config} data={props.configData} />;
+   
+    const confItems = <DashboardItems items={Config} data={props.configData} />;    
 
     let button;
     if (Object.keys(props.configData).length > 0) {
         button = <Button onClick={() =>
             fetch(`${props.API}/api/config/set`, {
                 method: "post",
-                body: form2bin(),
+                body: form2bin(),                
             }).then((response) => { return response.status; })
                 .then((status) => {
-                    if (status == 200) { props.requestUpdate(); }
-                })
+                    if (status == 200) {props.requestUpdate();}
+                })         
         }>{loc.globalSave}</Button>;
     }
 
     const form = <><Form>
         {confItems}
     </Form>
-        {button}
+    {button}        
     </>;
 
     return <><h2>{loc.titleConf}</h2><p>{form}</p></>;
@@ -58,15 +58,20 @@ export function ConfigPage(props) {
                     break;
 
                 default:
+                    if (Config[i].inputControl == "slider") {
+                        // Use state property that was modified when slider after change event fired
+                        // newData[Config[i].name] = document.getElementById[Config[i].name].value;
+                        newData[Config[i].name] = Config[i].value;
+                    } else {
                         newData[Config[i].name] = document.getElementById(Config[i].name).value;
-                    
+                    }
             }
         }
-
+        
         return obj2bin(newData, props.binSize, Config);
-
+        
     }
-
+    
 }
 
 ConfigPage.propTypes = {
