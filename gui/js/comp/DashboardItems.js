@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { ControlItem } from "./ControlItem";
-import { DisplayItemm } from "./DisplayItem";
+import { DisplayItem } from "./DisplayItem";
 import { StyledSlider } from "./UiComponents";
 import Config from "./../configuration.json";
 

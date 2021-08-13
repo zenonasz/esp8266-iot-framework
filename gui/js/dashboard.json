@@ -13,7 +13,7 @@
         "name": "adjustClockwiseInpt",
         "label": "Adjust Clockwise",
         "type": "uint32_t",
-        "direction": "control"
+        "direction": "display"
     },
     {
         "name": "adjustAntiClockwiseInpt",
