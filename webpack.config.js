@@ -10,7 +10,7 @@ const path = require("path");
 const del = require("del");
 
 module.exports = (env, argv) => ({
-
+    
     context: path.resolve(__dirname),
 
     entry: "./gui/js/index.js",
@@ -18,20 +18,6 @@ module.exports = (env, argv) => ({
     output: {
         filename: "bundle.js",
     },
-
-    // output: {
-    //     path: path.join(__dirname, 'dist'),
-    //     filename: "[name].js",
-    //     sourceMapFilename: "[name].js.map"
-    // },
-    // output: {
-    //     filename: "bundle.js",
-    //     path: path.resolve(__dirname, 'dist'),
-    //     filename: '[name].[hash:8].js',
-    //     sourceMapFilename: '[name].[hash:8].map',
-    //     chunkFilename: '[id].[hash:8].js'
-    // },
-    devtool: 'eval-source-map',
 
     module: {
         rules: [
@@ -81,7 +67,7 @@ module.exports = (env, argv) => ({
     },
 
     optimization: {
-        minimize: true,
+        minimize: true,        
     },
 
     resolve: {
@@ -104,7 +90,7 @@ module.exports = (env, argv) => ({
         }),
         new HtmlWebpackInlineSourcePlugin(),
         new MiniCssExtractPlugin(),
-        new CompressionPlugin(),
+        new CompressionPlugin(),        
         new EventHooksPlugin({
             done: () => {
                 if (argv.mode === "production") {
@@ -117,19 +103,19 @@ module.exports = (env, argv) => ({
                     });
 
                     const data = fs.readFileSync(source);
-
+                    
                     wstream.write("#ifndef HTML_H\n");
                     wstream.write("#define HTML_H\n\n");
-                    wstream.write("#include <Arduino.h>\n\n");
+                    wstream.write("#include <Arduino.h>\n\n");                
 
                     wstream.write(`#define html_len ${data.length}\n\n`);
 
                     wstream.write("const uint8_t html[] PROGMEM = {");
 
                     for (let i = 0; i < data.length; i++) {
-                        if (i % 1000 == 0) { wstream.write("\n"); }
+                        if (i % 1000 == 0) {wstream.write("\n");}
                         wstream.write(`0x${(`00${data[i].toString(16)}`).slice(-2)}`);
-                        if (i < data.length - 1) { wstream.write(","); }
+                        if (i < data.length - 1) {wstream.write(",");}
                     }
 
                     wstream.write("\n};");
