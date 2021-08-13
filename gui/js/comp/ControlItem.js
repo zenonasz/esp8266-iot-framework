@@ -53,7 +53,7 @@ export function ControlItem(props) {
                 case "uint8_t":
                     binDataView.setUint8(0, Number(target));
                     break;
-                case "t":
+                case "int8_t":
                     binDataView.setInt8(0, Number(target));
                     break;
                 case "uint16_t":
@@ -140,7 +140,7 @@ export function ControlItem(props) {
             thumbClassName="slider-thumb"
             trackClassName="slider-track"
             renderThumb={(props, data) => <div {...props}>{data.valueNow}</div>}
-            value={data}
+            value={data.value}
             // value={data.valueNow}
             {...props.conditionalAttributes}
             onAfterChange={(e) => { setTarget(e); save(); }}

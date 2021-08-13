@@ -137,23 +137,16 @@ export function DashboardItems(props) {
             // }
             if (typeof data !== "undefined" && typeof data[props.items[i].name] !== "undefined") {
                 value = data[props.items[i].name];
-                console.log(props.items[i].name);
-                // if (props.items[i].inputControl == "slider" ) {
-                //     console.log(props.items[i].name);
-                // } 
-                //number of digits
+
+
                 if (props.items[i].type == "float" && typeof props.items[i].digits !== "undefined") {
                     value = parseFloat(value).toFixed(props.items[i].digits);
                 }
 
             } else {
-                // if (props.items[i].type == "int8_t" ) {
-                //     value = 0;
-                //     console.log("yes");
-                // } else {
+
                 value = "";
-                // console.log(props.items[i].type);
-                // }
+
             }
 
             //const configInputAttributes = DefaultTypeAttributes[props.items[i].type] || {};
@@ -250,7 +243,7 @@ export function DashboardItems(props) {
                                 </select>
                             </p>
                         </>;
-                        break;
+                        // break;
 
                     }
                     else if (inputControlCheck == "slider") {
@@ -271,7 +264,7 @@ export function DashboardItems(props) {
                                     trackClassName="slider-track"
                                     renderThumb={(props, data) => <div {...props}>{data.valueNow}</div>}
                                     // value={data[props.items[i].name]}
-                                    value={value}
+                                    // value={value}
                                     // value={data[props.items[i]]}
                                     {...conditionalAttributes}
                                     // onAfterChange={(val) => document.getElementById[Config[i].name] = val}
@@ -280,7 +273,7 @@ export function DashboardItems(props) {
                                 // onAfterChange={(e) => { data[props.items[i]](e.target.value)}} 
 
                                 /></p></>;
-                        break;
+                        // break;
 
                     }
                     else {
