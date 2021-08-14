@@ -19,34 +19,34 @@
         "label": "Mqtt Server/Host",
         "type": "char",
         "length": 32,
-        "value": "rest"
+        "value": ""
     },
     {
         "name": "mqttPort",
         "label": "Mqtt Port",
         "type": "uint16_t",
-        "value": 1
+        "value": 0
     },
     {
         "name": "mqttClientName",
         "label": "Mqtt Client name",
         "type": "char",
         "length": 32,
-        "value": ""
+        "value": "123312"
     },
     {
         "name": "mqttUsername",
         "label": "Mqtt Username",
         "type": "char",
         "length": 32,
-        "value": ""
+        "value": "123312"
     },
     {
         "name": "mqttPassword",
         "label": "Mqtt Password",
         "type": "char",
         "length": 32,
-        "value": ""
+        "value": "12343"
     },
     {
         "name": "disabledMqttLabel",

@@ -1,14 +1,20 @@
 [
+
+    {
+        "name": "revolutionsLbl",
+        "label": "total Revolutions",
+        "type": "uint16_t",
+        "direction": "display"
+    },
     {
         "name": "dummySlider",
         "label": "Slider",
         "type": "uint8_t",
         "inputControl": "slider",
+        "direction": "control",
         "min": 1,
-        "max": 100,
-        "direction": "control"
+        "max": 100
     },
-     
     {
         "name": "adjustClockwiseInpt",
         "label": "Adjust Clockwise",
@@ -55,10 +61,10 @@
         "options": ["RPM_15", "RPM_7", "RPM_5", "RPM_4", "RPM_3", "RPM_2","RPM_1"]
     },
     {
-        "name": "mqttChkBox",
-        "label": "Enable Mqtt",
-        "type": "bool"
-       
+        "name": "stateBool",
+        "label": "State",
+        "type": "bool",
+        "direction": "control"
     }
-
+   
 ]

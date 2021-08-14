@@ -139,8 +139,8 @@ export function ControlItem(props) {
             className="horizontal-slider"
             thumbClassName="slider-thumb"
             trackClassName="slider-track"
-            renderThumb={(props, data) => <div {...props}>{data.valueNow}</div>}
-            value={data.value}
+            renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+            value={parseInt(data,10)}
             // value={data.valueNow}
             {...props.conditionalAttributes}
             onAfterChange={(e) => { setTarget(e); save(); }}

@@ -117,11 +117,13 @@ export function DashboardItems(props) {
         if (props.data.length > 0 && typeof props.data[0][1] !== "undefined") {
             //contains historical data
             setData(props.data[props.data.length - 1][1]);
+            // console.log(props.data[props.data.length - 1][1]);
+            // console.log(props.data);
         } else {
             setData(props.data);
         }
     });
-
+    // console.log(props.data);
     let confItems;
     if (props.items.length == 0) {
         confItems = <p>{loc.dashEmpty}</p>;
@@ -143,9 +145,11 @@ export function DashboardItems(props) {
                     value = parseFloat(value).toFixed(props.items[i].digits);
                 }
 
+
+
             } else {
 
-                value = "";
+                    value = "";
 
             }
 
@@ -251,7 +255,8 @@ export function DashboardItems(props) {
 
                         // Hide range info label, is redundant, since slider thumb displays selected value.
                         rangeInfo = "";
-                        data[props.items[i]] = props.items[i].value;
+                        value = parseInt(value, 10);
+                        // data[props.items[i]] = props.items[i].value;
                         confItems = <>{confItems}
                             <p>
                                 <label htmlFor={props.items[i].name}><b>{props.items[i].label || props.items[i].name}</b>: {rangeInfo}</label>
@@ -263,14 +268,21 @@ export function DashboardItems(props) {
                                     thumbClassName="slider-thumb"
                                     trackClassName="slider-track"
                                     renderThumb={(props, data) => <div {...props}>{data.valueNow}</div>}
+                                    // defaultValue={30}
                                     // value={data[props.items[i].name]}
                                     // value={value}
+                                    defaultValue={parseInt(props.items[i].value)}
                                     // value={data[props.items[i]]}
+                                    // value={value}
                                     {...conditionalAttributes}
+                                    onAfterChange={(e) => { setData(e); props.items[i].value=e;}}
                                     // onAfterChange={(val) => document.getElementById[Config[i].name] = val}
-                                    // onAfterChange={e => setData(e.target.value)}
-                                    onAfterChange={(val) => data[props.items[i]] = val}
-                                // onAfterChange={(e) => { data[props.items[i]](e.target.value)}} 
+                                    // onAfterChange={e => setData(e)}
+                                    // onAfterChange={(e) => { setData(e.target.value)}}
+                                    // onBeforeChange={(value, index) => console.log(`onBeforeChange: ${JSON.stringify({ value, index })}`)}
+                                    // onChange={(value, index) => console.log(`onChange: ${JSON.stringify({ value, index })}`)}
+                                    // onAfterChange={(value, index) => console.log(`onAfterChange: ${JSON.stringify({ value, index })}`)}
+                                    // onAfterChange={(e) => { data[props.items[i]](e.target.value)}} 
 
                                 /></p></>;
                         // break;

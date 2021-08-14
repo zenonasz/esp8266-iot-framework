@@ -30,7 +30,7 @@ if (Config.find(entry => entry.name === "language")) {
     loc = require("./lang/en.json");
 }
 
-let url = "http://127.0.0.1";
+let url = "http://192.168.1.50";
 if (process.env.NODE_ENV === "production") { url = window.location.origin; }
 
 if (process.env.NODE_ENV === "development") { require("preact/debug"); }
@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === "development") { require("preact/debug"); }
 
 
 // const theme = dark ? DARK_THEME : LIGHT_THEME;
-
+const displayData = new Array();
 function Root() {
 
     const [menu, setMenu] = useState(false);
@@ -46,7 +46,7 @@ function Root() {
     const [binSize, setBinSize] = useState(0);
     const [socket, setSocket] = useState({});
 
-    const displayData = new Array();
+   
 
     const [theme, themeToggler, mountedComponent] = useDarkMode();
 
@@ -64,6 +64,7 @@ function Root() {
             const dv = new DataView(buffer, 0);
             const timestamp = dv.getUint32(0, true);
             displayData.push([timestamp, bin2obj(buffer.slice(4, buffer.byteLength), Dash)]);
+            // console.log(displayData);
         });
     }
 
@@ -87,7 +88,7 @@ function Root() {
         projectVersion = Config.find(entry => entry.name === "projectVersion") ? Config.find(entry => entry.name === "projectVersion").value : "";
     }
 
-
+    // console.log(displayData);
     return <ThemeProvider theme={themeMode}>
         <><GlobalStyle />
 
@@ -99,9 +100,9 @@ function Root() {
                     <Hamburger onClick={() => setMenu(!menu)} />
 
                     <Menu className={menu ? "" : "menuHidden"}>
-                        <li><NavLink onClick={() => setMenu(false)} exact to="/">{loc.titleDash}</NavLink></li>
+                        <li><NavLink onClick={() => setMenu(false)} exact to="/dashboard">{loc.titleDash}</NavLink></li>
                         <li><NavLink onClick={() => setMenu(false)} exact to="/config">{loc.titleConf}</NavLink></li>
-                        <li><NavLink onClick={() => setMenu(false)} exact to="/wifi">{loc.titleWifi}</NavLink></li>
+                        <li><NavLink onClick={() => setMenu(false)} exact to="/">{loc.titleWifi}</NavLink></li>
                         {/* <li><NavLink onClick={() => setMenu(false)} exact to="/files">{loc.titleFile}</NavLink></li> */}
                         {/* <li><NavLink onClick={() => setMenu(false)} exact to="/firmware">{loc.titleFw}</NavLink></li> */}
                         <Toggle theme={theme} toggleTheme={themeToggler} />
@@ -121,7 +122,7 @@ function Root() {
                                 binSize={binSize}
                                 requestUpdate={fetchData} />
                         </Route>
-                        <Route exact path="/">
+                        <Route exact path="/dashboard">
                             <DashboardPage API={url}
                                 socket={socket}
                                 requestData={() => { return displayData; }} />
@@ -129,7 +130,7 @@ function Root() {
                         <Route exact path="/firmware">
                             <FirmwarePage API={url} />
                         </Route>
-                        <Route path="/wifi">
+                        <Route path="/">
                             <WifiPage API={url} />
                         </Route>
                     </Switch>

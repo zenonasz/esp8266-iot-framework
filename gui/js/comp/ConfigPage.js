@@ -6,7 +6,7 @@ import { obj2bin } from "../functions/configHelpers";
 
 import { Form, Button } from "./UiComponents";
 import { DashboardItems } from "./DashboardItems";
-
+// const [state, setState] = useState([]);
 let loc;
 if (Config.find(entry => entry.name === "language")) {
     loc = require("./../lang/" + Config.find(entry => entry.name === "language").value + ".json");
@@ -61,7 +61,7 @@ export function ConfigPage(props) {
                     if (Config[i].inputControl == "slider") {
                         // Use state property that was modified when slider after change event fired
                         // newData[Config[i].name] = document.getElementById[Config[i].name].value;
-                        newData[Config[i].name] = Config[i].value;
+                        newData[Config[i].name] = parseInt(Config[i].value, 10);
                     } else {
                         newData[Config[i].name] = document.getElementById(Config[i].name).value;
                     }
