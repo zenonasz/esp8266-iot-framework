@@ -63,8 +63,11 @@ export const GlobalStyle = createGlobalStyle`
 
     .horizontal-slider {
         max-width: 100%;
-        height: 38px;
+        height: 14px;
+        width: 410px;
         border: 0px solid grey;
+        display: inline-block;
+        padding: 0.3em;
     }
     .vertical-slider {
         height: 380px;

@@ -25,7 +25,7 @@ const Display = styled.p`
         padding:0.3em;
         display:inline-block;
         border:1px solid #c0d1de;
-        background-color:#edf3fc;
+        background-color:${({ theme }) => theme.body};
     }
     span.false {
         border:1px solid #ff3333;
@@ -111,6 +111,7 @@ const DefaultTypeAttributes = {
 export function DashboardItems(props) {
 
     const [data, setData] = useState([]);
+    // const [valueD, setValueD] = useState([]);
     // const [state, setState] = useState([]);
     //populate graphs
     useEffect(() => {
@@ -133,13 +134,21 @@ export function DashboardItems(props) {
                 continue;
             }
 
+
             let value;
             // if (typeof data !== "undefined" && data[props.items[i].name] !== "undefined") {
             //     console.log(props.items[i].name);
             // }
             if (typeof data !== "undefined" && typeof data[props.items[i].name] !== "undefined") {
                 value = data[props.items[i].name];
+                // valueD[props.items[i].name] = data[props.items[i].name];
+                // setValueD(data[props.items[i].name]);
 
+                if (props.items[i].type == "uint8_t") {
+                    value = parseInt(value, 10);
+                    // valueD[props.items[i].name] = parseInt(data[props.items[i].name],10);
+                    // setValueD( parseInt(data[props.items[i].name],10));
+                }
 
                 if (props.items[i].type == "float" && typeof props.items[i].digits !== "undefined") {
                     value = parseFloat(value).toFixed(props.items[i].digits);
@@ -148,8 +157,13 @@ export function DashboardItems(props) {
 
 
             } else {
-
-                    value = "";
+                // continue;
+                value = "";
+                if (props.items[i].type == "uint8_t") {
+                    value = 0;
+                    // valueD[props.items[i].name] = 0;
+                    // setValueD(0);
+                }
 
             }
 
@@ -166,6 +180,7 @@ export function DashboardItems(props) {
             }
             if (typeof props.items[i].inputControl !== "undefined") {
                 inputControlCheck = props.items[i].inputControl;
+                // value = props.items[i].value;
                 // console.log(inputControlCheck);
             } else {
                 inputControlCheck = "";
@@ -254,9 +269,25 @@ export function DashboardItems(props) {
                         // Using https://github.com/zillow/react-slider
 
                         // Hide range info label, is redundant, since slider thumb displays selected value.
-                        rangeInfo = "";
-                        value = parseInt(value, 10);
+                        // rangeInfo = "";
+                        // value = parseInt(value, 10);
+                        // if (value !== "undefined" || value !== "") {
+                        //     value = parseInt(value, 10);
+                        // } else {
+                        //     value = parseInt(0, 10);
+                        // }
+                        // if (isNaN(value) == true) {
+                        //     confItems = <>{confItems}</>;
+                        // }
+                        // else {
+                        //     console.info('Not a NaN');
+                        //     value = parseInt(value, 10);
+                        // }
                         // data[props.items[i]] = props.items[i].value;
+
+                        // data[props.items[i]] = props.items[i].value;
+                        if (typeof data[props.items[i].name] !== "undefined"){
+                           
                         confItems = <>{confItems}
                             <p>
                                 <label htmlFor={props.items[i].name}><b>{props.items[i].label || props.items[i].name}</b>: {rangeInfo}</label>
@@ -267,32 +298,40 @@ export function DashboardItems(props) {
                                     className="horizontal-slider"
                                     thumbClassName="slider-thumb"
                                     trackClassName="slider-track"
-                                    renderThumb={(props, data) => <div {...props}>{data.valueNow}</div>}
+                                    renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
                                     // defaultValue={30}
                                     // value={data[props.items[i].name]}
+                                    // value={(typeof data !== "undefined" && typeof data[props.items[i].name] !== "undefined") ? parseInt(data[props.items[i].name], 10) : 0}
                                     // value={value}
-                                    defaultValue={parseInt(props.items[i].value)}
+                                    defaultValue={value}
+                                    // defaultValue={parseInt(props.items[i].value)}
                                     // value={data[props.items[i]]}
-                                    // value={value}
+                                    // value={parseInt(props.items[i].value)}
                                     {...conditionalAttributes}
-                                    onAfterChange={(e) => { setData(e); props.items[i].value=e;}}
-                                    // onAfterChange={(val) => document.getElementById[Config[i].name] = val}
-                                    // onAfterChange={e => setData(e)}
-                                    // onAfterChange={(e) => { setData(e.target.value)}}
-                                    // onBeforeChange={(value, index) => console.log(`onBeforeChange: ${JSON.stringify({ value, index })}`)}
-                                    // onChange={(value, index) => console.log(`onChange: ${JSON.stringify({ value, index })}`)}
-                                    // onAfterChange={(value, index) => console.log(`onAfterChange: ${JSON.stringify({ value, index })}`)}
-                                    // onAfterChange={(e) => { data[props.items[i]](e.target.value)}} 
+                                    // onAfterChange={(e) => { data[props.items[i].name] = e; props.items[i].value = e;}}
+                                    // onAfterChange={(e) => { setData(data[props.items[i].name] = e); }}
+                                    // onAfterChange={(e) => { data[props.items[i].name] = e;  setData();}}
+                                    onAfterChange={(e) => { data[props.items[i].name] = e; }}
+                                    // setData({[props.items[i].name]: e});
+                                // onAfterChange={(val) => document.getElementById[Config[i].name] = val}
+                                // onAfterChange={e => setData(e)}
+                                // onAfterChange={(e) => { setData(e.target.value) }}
+                                // onBeforeChange={(value, index) => console.log(`onBeforeChange: ${JSON.stringify({ value, index })}`)}
+                                // onChange={(value, index) => console.log(`onChange: ${JSON.stringify({ value, index })}`)}
+                                // onAfterChange={(value, index) => console.log(`onAfterChange: ${JSON.stringify({ value, index })}`)}
+                                // onAfterChange={(e) => { data[props.items[i]](e.target.value) }} 
 
                                 /></p></>;
                         // break;
-
+                        // continue;
+                    }
                     }
                     else {
                         confItems = <>{confItems}
                             <p>
                                 <label htmlFor={props.items[i].name}><b>{props.items[i].label || props.items[i].name}</b>: {rangeInfo}</label>
-                                <input type={inputType} id={props.items[i].name} name={props.items[i].name} value={value} {...conditionalAttributes} disabled={props.items[i].disabled} />
+                                <input type={inputType} id={props.items[i].name} name={props.items[i].name} value={value} {...conditionalAttributes} disabled={props.items[i].disabled}   />
+                               {/* working but dont like it onChange={(e) => { data[props.items[i].name] = e.target.value; setData();}} */}
                             </p>
                         </>;
                     }

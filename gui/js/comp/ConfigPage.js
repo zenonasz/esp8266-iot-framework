@@ -61,7 +61,8 @@ export function ConfigPage(props) {
                     if (Config[i].inputControl == "slider") {
                         // Use state property that was modified when slider after change event fired
                         // newData[Config[i].name] = document.getElementById[Config[i].name].value;
-                        newData[Config[i].name] = parseInt(Config[i].value, 10);
+                        // newData[Config[i].name] = parseInt(Config[i].value, 10);
+                        newData[Config[i].name] = parseInt(props.configData[Config[i].name], 10);
                     } else {
                         newData[Config[i].name] = document.getElementById(Config[i].name).value;
                     }

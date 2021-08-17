@@ -56,7 +56,7 @@
         "value": false
     },
     {
-        "name": "dummySlider",
+        "name": "dummySlider2",
         "label": "Slider",
         "type": "uint8_t",
         "inputControl": "slider",
